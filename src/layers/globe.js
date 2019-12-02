@@ -41,7 +41,8 @@ export default Kapsule({
     globeImageUrl: {},
     bumpImageUrl: {},
     showAtmosphere: { default: true, onChange(showAtmosphere, state) { state.atmosphereObj.visible = !!showAtmosphere }, triggerUpdate: false },
-    showGraticules: { default: false, onChange(showGraticules, state) { state.graticulesObj.visible = !!showGraticules }, triggerUpdate: false }
+    showGraticules: { default: false, onChange(showGraticules, state) { state.graticulesObj.visible = !!showGraticules }, triggerUpdate: false },
+    onGlobeReady: {}
   },
 
   stateInit: () => {
@@ -122,11 +123,13 @@ export default Kapsule({
       if (!state.globeImageUrl) {
         // Black globe if no image
         globeMaterial.color = new THREE.Color(0x000000);
+        state.onGlobeReady()
       } else {
         new THREE.TextureLoader().load(state.globeImageUrl, texture => {
           globeMaterial.map = texture;
           globeMaterial.color = null;
           globeMaterial.needsUpdate = true;
+          state.onGlobeReady()
         });
       }
     }
